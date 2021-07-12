@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ScreenAddiction</string>
+    <string name="uiScreenCounter">Addiction level: </string>
+</resources>
