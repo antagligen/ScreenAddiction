@@ -6,14 +6,17 @@ import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
+//No idea wtf this class is made of
 class CounterViewModel(private val context: Application) : AndroidViewModel(context), SharedPreferences.OnSharedPreferenceChangeListener {
+
+
     private val _counter = MutableLiveData<Int>(0)
     val counter : LiveData<Int> = _counter
 
+    //When the CounterViewModel is initialized, get the current number of screen
     init {
         _counter.value = getScreenOns()
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -33,11 +36,11 @@ class CounterViewModel(private val context: Application) : AndroidViewModel(cont
 
     fun getScreenOns() : Int
     {
-        return loadData().getInt(COUNTER_KEY, DEFAULT_VALUE)
+        return loadData().getInt(COUNTER_DATE, DEFAULT_VALUE)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == COUNTER_KEY){
+        if (key == COUNTER_DATE){
             _counter.value = getScreenOns()
         }
     }

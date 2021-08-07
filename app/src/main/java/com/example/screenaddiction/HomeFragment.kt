@@ -20,10 +20,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
 
 
-
-
-
-
         //Observe the counter in the viewmodel and update the GUI with the value.
         model.counter.observe(viewLifecycleOwner) {
           view.findViewById<TextView>(R.id.uiScreenCounter).text = it.toString()
