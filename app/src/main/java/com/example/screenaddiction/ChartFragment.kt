@@ -1,29 +1,103 @@
 package com.example.screenaddiction
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.data.LineData
+
+
+
 
 
 class ChartFragment : Fragment(R.layout.fragment_chart) {
-    private val model: CounterViewModel by activityViewModels()
 
-
+    private val dataBase = DatabaseHandles()
 
     val BARWIDTH = 0.8f
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        createBarChart(view)
-
-
+       // createBarChart(view)
+        //Code below is latest thing changed.
+        createLineChartWeek(this.requireContext(), view)
 
     }
+    private fun createLineChartWeek(context: Context, view: View) {
+
+        val hMap = dataBase.getAllEntries(context)
+
+        val lineChart = view.findViewById<com.github.mikephil.charting.charts.LineChart>(R.id.lineChart)
+
+        val entries = createDataEntries(hMap)
+        entries.add(Entry(1f, 10f))
+        entries.add(Entry(2f, 2f))
+
+        val xAxisLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" )
+
+        lineChart.xAxis.valueFormatter =  IndexAxisValueFormatter(xAxisLabels)
+        //add the values to the dataset
+        val lDataSet = LineDataSet(entries,"dataset")
+        lDataSet.setDrawValues(false)
+        lDataSet.setDrawFilled(false)
+        lDataSet.lineWidth = 3f
+        lDataSet.fillColor = R.color.black
+        lDataSet.fillAlpha = R.color.purple_700
+
+
+
+
+        //AXIS
+        lineChart.xAxis.labelRotationAngle = 0f
+        lineChart.xAxis.setDrawGridLines(false)
+        lineChart.xAxis.setDrawAxisLine(false)
+        lineChart.legend.isEnabled = false
+        lineChart.xAxis.axisMaximum = 7f
+        lineChart.xAxis.axisMinimum = 0f
+        lineChart.setTouchEnabled(true)
+        lineChart.setPinchZoom(true)
+
+
+
+        lineChart.axisRight.isEnabled = false
+        lineChart.xAxis.axisMaximum = 0.1f
+
+
+//Part10
+        lineChart.animateX(1800, Easing.EaseInExpo)
+
+        lineChart.data = LineData(lDataSet)
+        lineChart.invalidate() // refresh
+
+    }
+
+    private fun fetchLineChartData() : MutableMap<String, Any?>{
+
+        val hMap: MutableMap<String,Any?> = LinkedHashMap()
+        context?.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
+            hMap[it.key] = it.value
+        }
+        return hMap
+    }
+    private fun createDataEntries(hMap : MutableMap<String, Any?>) : ArrayList<Entry>{
+        var xAxis = 0f
+        val entries = ArrayList<Entry>()
+        for ((key, value) in hMap ){
+            entries.add(Entry(xAxis,value.toString().toFloat()))
+            xAxis =+ 1f
+        }
+        return entries
+    }
+
+
+
+
+    /*
     private fun createBarChart(view: View){
 
         //Creates a list with the bars, each entry represents a a bar on x and y-axis.
@@ -77,7 +151,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
         //draw chart
         barChart.invalidate()
     }
-
+*/
 
 }
 

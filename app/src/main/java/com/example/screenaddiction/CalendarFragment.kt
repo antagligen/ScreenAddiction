@@ -12,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class CalendarFragment : Fragment(R.layout.fragment_calendar) {
-    private val model: CounterViewModel by activityViewModels()
 
 
 

@@ -10,42 +10,19 @@ import java.util.*
 
 
 class LockScreenListener : BroadcastReceiver() {
-    //Create a key which matches todays date
-    val COUNTER_DATE = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
-    val DEFAULT_VALUE = 0
-    val DATABASE = "DATABASE"
 
 
-    private fun saveData(context: Context, counter : Int ) {
-
-        //create a sharedPref based on todays date.
-        context.getSharedPreferences(DATABASE, MODE_PRIVATE)
-            .edit()
-            .putInt(COUNTER_DATE,counter)
-            .apply()
-
-    }
-
-    private fun loadData(context: Context) : SharedPreferences {
-        return context.getSharedPreferences(DATABASE, MODE_PRIVATE)
-    }
-
-    fun getScreenOns(context: Context) : Int {
-        return loadData(context).getInt(COUNTER_DATE, DEFAULT_VALUE)
-    }
-
-
+    private val dataBase = DatabaseHandles()
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val screenOn = intent?.action
-        when (screenOn){
+        when (intent?.action){
             Intent.ACTION_SCREEN_ON -> {
-                Toast.makeText(context,"wolololo", Toast.LENGTH_SHORT)
+                Toast.makeText(context,"wolololo", Toast.LENGTH_SHORT).show()
 
                 if (context != null){
-                    val counter = getScreenOns(context) + 1
+                    val counter = dataBase.getScreenOns(context) + 1
                     println(counter)
-                    saveData(context, counter)
+                    dataBase.saveData(context, counter)
 
                 }
 

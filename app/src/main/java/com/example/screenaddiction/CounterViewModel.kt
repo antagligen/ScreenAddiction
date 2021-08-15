@@ -15,33 +15,23 @@ class CounterViewModel(private val context: Application) : AndroidViewModel(cont
 
     private val _counter = MutableLiveData<Int>(0)
     val counter : LiveData<Int> = _counter
+    private val dataBase = DatabaseHandles()
 
     //When the CounterViewModel is initialized, get the current number of screen
+    //Unregister the sharepref listener to avoid doublettes.
     init {
-        _counter.value = getScreenOns()
+        _counter.value = dataBase.getScreenOns(context)
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val currentDate = dateFormat.format(Date())
-        context.getSharedPreferences(currentDate, Context.MODE_PRIVATE)
+        context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)
             .unregisterOnSharedPreferenceChangeListener(this)
 
-        context.getSharedPreferences(currentDate, Context.MODE_PRIVATE)
+        context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)
             .registerOnSharedPreferenceChangeListener(this)
-    }
-
-    private fun loadData() : SharedPreferences {
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val currentDate = dateFormat.format(Date())
-        return context.getSharedPreferences(currentDate, Context.MODE_PRIVATE)
-    }
-
-    fun getScreenOns() : Int
-    {
-        return loadData().getInt(COUNTER_DATE, DEFAULT_VALUE)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == COUNTER_DATE){
-            _counter.value = getScreenOns()
+            _counter.value = dataBase.getScreenOns(context)
         }
     }
 }
