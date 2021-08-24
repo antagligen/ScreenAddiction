@@ -5,21 +5,22 @@ import android.content.SharedPreferences
 import java.text.SimpleDateFormat
 import java.util.*
 
-val COUNTER_DATE = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
-val DEFAULT_VALUE = 0
-val DATABASE = "DATABASE"
+val COUNTER_DATE: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
+const val DEFAULT_VALUE = 0
+const val DATABASE = "DATABASE"
+const val LOWEST_VALUE_VAR = 9999
 
 class DatabaseHandles {
     fun saveData(context: Context, counter : Int ) {
 
-        //create a sharedPref based on todays date.
+        //create a sharedPref with keys based on todays date
         context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)
             .edit()
             .putInt(COUNTER_DATE,counter)
             .apply()
 
     }
-    fun loadData(context: Context) : SharedPreferences {
+    private fun loadData(context: Context) : SharedPreferences {
         return context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)
     }
 
@@ -29,11 +30,38 @@ class DatabaseHandles {
      fun getAllEntries(context: Context) : MutableMap<String, Any?> {
 
          val hMap: MutableMap<String, Any?> = LinkedHashMap()
-         context?.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
+         context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
              hMap[it.key] = it.value
          }
          return hMap
      }
+
+    fun getHighestEntry(context: Context) : MutableMap<String, Any?>{
+
+        var highestValue = 0
+        var highestKey = ""
+        context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
+            if (it.value != null && it.value.toString().toInt() > highestValue)
+                highestValue = it.value.toString().toInt()
+                highestKey = it.key
+        }
+        val hMap: MutableMap<String, Any?> = LinkedHashMap()
+        hMap[highestKey] = highestValue
+        return hMap
+    }
+
+    fun getLowestEntry(context: Context) : MutableMap<String, Any?>{
+        var lowestValue = LOWEST_VALUE_VAR
+        var lowestKey = ""
+        context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
+            if (it.value != null && it.value.toString().toInt() < lowestValue)
+                lowestValue = it.value.toString().toInt()
+            lowestKey = it.key
+        }
+        val hMap: MutableMap<String, Any?> = LinkedHashMap()
+        hMap[lowestKey] = lowestValue
+        return hMap
+    }
 
 
 }

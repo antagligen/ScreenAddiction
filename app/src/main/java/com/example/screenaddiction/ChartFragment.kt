@@ -49,9 +49,6 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
         lDataSet.fillColor = R.color.black
         lDataSet.fillAlpha = R.color.purple_700
 
-
-
-
         //AXIS
         lineChart.xAxis.labelRotationAngle = 0f
         lineChart.xAxis.setDrawGridLines(false)
@@ -76,13 +73,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
 
     }
 
-    private fun fetchLineChartData() : MutableMap<String, Any?>{
 
-        val hMap: MutableMap<String,Any?> = LinkedHashMap()
-        context?.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
-            hMap[it.key] = it.value
-        }
-        return hMap
     }
     private fun createDataEntries(hMap : MutableMap<String, Any?>) : ArrayList<Entry>{
         var xAxis = 0f
@@ -153,5 +144,5 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
     }
 */
 
-}
+
 

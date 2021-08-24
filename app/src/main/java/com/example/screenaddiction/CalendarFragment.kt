@@ -17,8 +17,22 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val dataBase = DatabaseHandles()
+
+        view.findViewById<TextView>(R.id.highestCounter).text = context?.let { dataBase.getHighestEntry(it)
+            .values.toString() }
+
+        view.findViewById<TextView>(R.id.highestDate).text = context?.let { dataBase.getHighestEntry(it)
+            .keys.toString() }
+
+        view.findViewById<TextView>(R.id.lowestCounter).text = context?.let { dataBase.getLowestEntry(it)
+            .values.toString() }
+
+        view.findViewById<TextView>(R.id.lowestDate).text = context?.let { dataBase.getLowestEntry(it)
+            .keys.toString() }
 
         }
+
     }
 
 

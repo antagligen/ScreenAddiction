@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">ScreenAddiction</string>
     <string name="uiScreenCounter">Addiction level: </string>
+    <string name="highestDate">TextView</string>
+    <string name="highestCounter">TextView</string>
+    <string name="lowestDate">TextView</string>
+    <string name="lowestCounter">TextView</string>
 
 </resources>
