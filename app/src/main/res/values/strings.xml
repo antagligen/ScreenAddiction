@@ -5,5 +5,7 @@
     <string name="highestCounter">TextView</string>
     <string name="lowestDate">TextView</string>
     <string name="lowestCounter">TextView</string>
+    <string name="averageCounter">averageCounter</string>
+    <string name="AverageAddiction">averageText</string>
 
 </resources>

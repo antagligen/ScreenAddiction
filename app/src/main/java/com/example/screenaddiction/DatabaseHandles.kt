@@ -41,27 +41,40 @@ class DatabaseHandles {
         var highestValue = 0
         var highestKey = ""
         context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
-            if (it.value != null && it.value.toString().toInt() > highestValue)
+            if (it.value != null && it.value.toString().toInt() > highestValue){
                 highestValue = it.value.toString().toInt()
                 highestKey = it.key
+            }
+
         }
         val hMap: MutableMap<String, Any?> = LinkedHashMap()
         hMap[highestKey] = highestValue
         return hMap
+
     }
 
     fun getLowestEntry(context: Context) : MutableMap<String, Any?>{
         var lowestValue = LOWEST_VALUE_VAR
         var lowestKey = ""
         context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
-            if (it.value != null && it.value.toString().toInt() < lowestValue)
+            if (it.value != null && it.value.toString().toInt() < lowestValue){
                 lowestValue = it.value.toString().toInt()
-            lowestKey = it.key
+                lowestKey = it.key
+            }
         }
         val hMap: MutableMap<String, Any?> = LinkedHashMap()
         hMap[lowestKey] = lowestValue
         return hMap
     }
 
+    fun getAverageEntry(context: Context) : Int{
+        var sum = 0
+        context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
+            sum += it.value.toString().toInt()
+        }
+
+        var numberOfEntries = context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE).all?.size
+        return sum/ numberOfEntries!!
+    }
 
 }

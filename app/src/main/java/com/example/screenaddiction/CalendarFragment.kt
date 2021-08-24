@@ -31,6 +31,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         view.findViewById<TextView>(R.id.lowestDate).text = context?.let { dataBase.getLowestEntry(it)
             .keys.toString() }
 
+        view.findViewById<TextView>(R.id.averageCounter).text = context?.let { dataBase.getAverageEntry(it)
+            .toString() }
         }
 
     }
