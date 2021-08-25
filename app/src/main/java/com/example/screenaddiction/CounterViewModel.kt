@@ -12,15 +12,25 @@ import java.util.*
 //No idea wtf this class is made of
 class CounterViewModel(private val context: Application) : AndroidViewModel(context), SharedPreferences.OnSharedPreferenceChangeListener {
 
-
-    private val _counter = MutableLiveData<Int>(0)
-    val counter : LiveData<Int> = _counter
     private val dataBase = DatabaseHandles()
+
+    private val _totalCounter = MutableLiveData(dataBase.getScreenOns(context))
+    val totalCounter : LiveData<Int> = _totalCounter
+
+    private val _averageCounter = MutableLiveData(dataBase.getAverageEntry(context))
+    val averageCounter : LiveData<Int> = _averageCounter
+
+    private val _lowestCounter = MutableLiveData(dataBase.getLowestEntry(context))
+    val lowestCounter : LiveData<DateValue> = _lowestCounter
+
+    private val _highestCounter = MutableLiveData(dataBase.getHighestEntry(context))
+    val highestCounter : LiveData<DateValue> = _highestCounter
+
 
     //When the CounterViewModel is initialized, get the current number of screen
     //Unregister the sharepref listener to avoid doublettes.
     init {
-        _counter.value = dataBase.getScreenOns(context)
+        _totalCounter.value = dataBase.getScreenOns(context)
         val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)
             .unregisterOnSharedPreferenceChangeListener(this)
@@ -31,7 +41,10 @@ class CounterViewModel(private val context: Application) : AndroidViewModel(cont
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == COUNTER_DATE){
-            _counter.value = dataBase.getScreenOns(context)
+            _totalCounter.value = dataBase.getScreenOns(context)
+            _averageCounter.value = dataBase.getAverageEntry(context)
+            _lowestCounter.value = dataBase.getLowestEntry(context)
+            _highestCounter.value = dataBase.getHighestEntry(context)
         }
     }
 }

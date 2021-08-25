@@ -10,6 +10,8 @@ const val DEFAULT_VALUE = 0
 const val DATABASE = "DATABASE"
 const val LOWEST_VALUE_VAR = 9999
 
+data class DateValue(val date: String = "", val value: Int = 0)
+
 class DatabaseHandles {
     fun saveData(context: Context, counter : Int ) {
 
@@ -36,35 +38,31 @@ class DatabaseHandles {
          return hMap
      }
 
-    fun getHighestEntry(context: Context) : MutableMap<String, Any?>{
+    fun getHighestEntry(context: Context) : DateValue{
 
         var highestValue = 0
         var highestKey = ""
         context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
-            if (it.value != null && it.value.toString().toInt() > highestValue){
-                highestValue = it.value.toString().toInt()
+            if (it.value != null && it.value as Int > highestValue){
+                highestValue = it.value as Int
                 highestKey = it.key
             }
 
         }
-        val hMap: MutableMap<String, Any?> = LinkedHashMap()
-        hMap[highestKey] = highestValue
-        return hMap
+        return DateValue(highestKey, highestValue)
 
     }
 
-    fun getLowestEntry(context: Context) : MutableMap<String, Any?>{
+    fun getLowestEntry(context: Context) : DateValue{
         var lowestValue = LOWEST_VALUE_VAR
         var lowestKey = ""
         context.getSharedPreferences(DATABASE, Context.MODE_PRIVATE)?.all?.forEach {
-            if (it.value != null && it.value.toString().toInt() < lowestValue){
-                lowestValue = it.value.toString().toInt()
+            if (it.value != null && (it.value as Int) < lowestValue){
+                lowestValue = it.value as Int
                 lowestKey = it.key
             }
         }
-        val hMap: MutableMap<String, Any?> = LinkedHashMap()
-        hMap[lowestKey] = lowestValue
-        return hMap
+        return DateValue(lowestKey, lowestValue)
     }
 
     fun getAverageEntry(context: Context) : Int{
